@@ -1,0 +1,7 @@
+CREATE TABLE FIELD(
+	field_id number NOT NULL,
+	field_name varchar(20),
+	group_id number NOT NULL,
+	CONSTRAINT field_pk PRIMARY KEY(field_id),
+	CONSTRAINT field_fk FOREIGN KEY (group_id) REFERENCES GROUPS(group_id)	
+)	

@@ -1,0 +1,5 @@
+CREATE TABLE DEPARTMENTS(
+	department_id number NOT NULL,
+	department_name varchar(100) NOT NULL,
+	CONSTRAINT department_pk PRIMARY KEY(department_id)
+)
