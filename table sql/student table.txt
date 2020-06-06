@@ -1,0 +1,10 @@
+CREATE TABLE STUDENTS(
+	student_id number NOT NULL,
+	student_pw varchar(30) NOT NULL,
+	student_name varchar(30) NOT NULL,
+	student_semester number NOT NULL,
+	student_credit number DEFAULT 19, NOT NULL,
+	department_id number NOT NULL,
+	CONSTRAINT students_pk PRIMARY KEY(student_id),
+	CONSTRAINT students_fk FOREIGN KEY (department_id) REFERENCES DEPARTMENTS(department_id)
+)
