@@ -1,6 +1,6 @@
 CREATE TABLE PROFESSORS(
 	professor_id number NOT NULL,
-	professor_name varchar(30) NOT NULL,
+	professor_name varchar2(30) NOT NULL,
 	department_id number NOT NULL,
 	CONSTRAINT professor_pk PRIMARY KEY(professor_id),
 	CONSTRAINT professor_fk FOREIGN KEY (department_id) REFERENCES DEPARTMENTS(department_id)	
