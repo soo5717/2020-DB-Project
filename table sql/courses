@@ -1,0 +1,9 @@
+create table COURSES(
+  professor_id number not null, 
+  subject_id number not null, 
+  course_division number not null, 
+  course_time varchar2(20) not null,
+  course_personnel number not null,
+  room_name varchar(30) not null, 
+  
+)
