@@ -1,0 +1,5 @@
+CREATE TABLE GROUPS(
+	group_id number NOT NULL,
+	group_name varchar(20) NOT NULL,
+	CONSTRAINT group_pk PRIMARY KEY(group_id)
+)

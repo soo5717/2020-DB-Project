@@ -1,9 +1,0 @@
-CREATE TABLE SUBJECT(
-	subject_id number NOT NULL,
-	subject_name varchar2(100) NOT NULL,
-	subject_credit number NOT NULL,
-	department_id number NOT NULL,
-	subject_group varchar2(20) NOT NULL,
-	CONSTRAINT subject_pk PRIMARY KEY(subject_id),
-	CONSTRAINT subject_fk3 FOREIGN KEY (department_id) REFERENCES DEPARTMENTS(department_id)
-)
