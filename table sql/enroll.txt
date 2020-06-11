@@ -1,0 +1,9 @@
+create table ENROLL(
+  subject_id number not null, 
+  course_division number not null, 
+  student_id number not null, 
+  enroll_date date not null,
+  CONSTRAINT enroll_pk PRIMARY KEY (subject_id, student_id), 
+  CONSTRAINT enroll_fk_std FOREIGN KEY (student_id) REFERENCES students(student_id), 
+  CONSTRAINT enroll_fk_sbj FOREIGN KEY (subject_id) REFERENCES subjects(subject_id)
+)
