@@ -33,7 +33,7 @@ BEGIN
 	FROM SUBJECTS s, COURSE c
 	WHERE s.subject_id = subjectID AND s.subject_id = c.subject_id AND c.course_division = courseDivision;
 	
-	IF(nSumCredit + nCredit >18)/*성적 넣지 않아 기본인 18로*/
+	IF(nSumCredit + nCredit > 19)/*성적 넣지 않아 기본인 18로*/
 	THEN 
 		RAISE too_many_sumCredit;
 	END IF;
@@ -107,25 +107,35 @@ CREATE OR REPLACE function CheckTimeDuplicate
 RETURN NUMBER
 IS	    
 	CURSOR my_time_table IS
-	SELECT To_Char(c.course_start,'mmdd HH:MI') cStart, To_Char(c.course_end,'mmdd HH:MI') cEnd
+	SELECT c.course_start1 as str1 AND c.course_end1 as end1
+			 AND NVL(c.course_start2,00000) as str2 AND NVL(c.course_end2,00000) as end1
 	FROM ENROLL e, COURSES c
 	WHERE e.subject_id = subject_id AND e.subject_id = c.subject_id
 	    AND e.course_division = course_division AND e.student_id = student_id
 	    AND e.course_division = c.course_division;
-	nStart varchar2(20);/*Type을 date time으로 해야하나...*/
-	nEnd varchar2(20);
+	nStr1 number;
+	nEnd1 number;
+	nStr2 number;
+	nEnd2 number;
 BEGIN
-	SELECT To_Char(c.course_start,'mmdd HH:MI'),To_Char(c.course_end,'mmdd HH:MI')
-	INTO nStart,nEnd
+	SELECT c.course_start1 AND c.course_end1 
+			 AND NVL(c.course_start2,00000) AND NVL(c.course_end2,00000)
+	INTO nStr1,nEnd1,nStr2,nEnd2
 	FROM COURSES c
 	WHERE c.subject_id = subject_id AND c.course_division = course_division;
 	
 	FOR my_cList IN my_time_table LOOP
-		IF( my_cList.cStart > nEnd OR my_cList.cEnd < nStart ) THEN RETURN 1;
-		ELSE RETURN 0;
+		IF( my_cList.str1 < nEnd1 AND my_cList.end1 > nStr1) THEN	
+			RETURN 0;
+		ELSIF (my_cList.str2 < nEnd1 AND my_cList.end2 > nStr1)THEN
+			RETURN 0;
+		ELSIF ( my_cList.str2 < nEnd1 AND my_cList.end2 > nStr1)THEN
+			RETURN 0;
+		ELSIF ( my_cList.str2 < nEnd2 AND my_cList.end2 > nStr2)THEN
+			RETURN 0;
+		ELSE RETURN 1;
 		END IF;
-	END LOOP;
-				
+	END LOOP;				
 END ;
 /
 
