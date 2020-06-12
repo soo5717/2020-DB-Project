@@ -1,4 +1,4 @@
-CREATE TABLE SUBJECT(
+CREATE TABLE SUBJECTS(
 	subject_id number NOT NULL,
 	subject_name varchar2(100) NOT NULL,
 	subject_credit number NOT NULL,
