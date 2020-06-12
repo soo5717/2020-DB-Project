@@ -6,4 +6,4 @@ create table ENROLL(
   CONSTRAINT enroll_pk PRIMARY KEY (subject_id, student_id), 
   CONSTRAINT enroll_fk_std FOREIGN KEY (student_id) REFERENCES students(student_id), 
   CONSTRAINT enroll_fk_sbj FOREIGN KEY (subject_id) REFERENCES subjects(subject_id)
-)
+);
