@@ -1,0 +1,133 @@
+CREATE OR REPLACE PROCEDURE InsertEnroll(
+studentID in NUMBER,
+subjectID in NUMBER,
+courseDivision in NUMBER,
+result out VARCHAR2
+)
+IS
+	too_many_sumCredit EXCEPTION;
+	too_many_courses EXCEPTION;
+	too_many_students EXCEPTION;
+	duplicate_time EXCEPTION;
+	nYear NUMBER;
+	nSemester NUMBER;/*현재 학기*/
+	nSumCredit NUMBER; /*총 신청 학점*/
+	nCredit NUMBER; /*해당 과목의 학점*/
+	nCnt NUMBER;
+	nTeachMax NUMBER;
+BEGIN	
+	DBMS_OUTPUT.PUT_LINE('#');
+	DBMS_OUTPUT.PUT_LINE(studentID ||'님이 과목 번호 '|| subjectID ||' 분반 ' || TO_CHAR(courseDivision) ||'의 수강 등록을 요청하셨습니다.');
+	/*년도 학기 알아내기*/
+	nYear := Date2EnrollYear(SYSDATE);
+	nSemenster := Date2EnrollSemester(SYSDATE);
+	/*예외 처리1 : 최대학점 초과 여부*/
+	SELECT SUM(s.subject_credit)
+	INTO nSumCredit
+	FROM SUBJECTS s, ENROLL e
+	WHERE e.student_id = studentID AND e.enroll_year = nYear
+		  AND e.enroll_semester = nSemester AND s.subject_id = e.subject_id;/*분반 조건은 안함*/
+		    
+	SELECT subject_creit
+	INTO nCredit
+	FROM SUBJECTS s, COURSE c
+	WHERE s.subject_id = subjectID AND s.subject_id = c.subject_id AND c.course_division = courseDivision;
+	
+	IF(nSumCredit + nCredit >18)/*성적 넣지 않아 기본인 18로*/
+	THEN 
+		RAISE too_many_sumCredit;
+	END IF;
+	
+	/*에러 처리2 : 해당 학기에 동일 과목 신청 여부*/
+	SELECT COUNT(*)
+	INTO nCnt
+	FROM ENROLL e
+	WHERE e.student_id = studentID AND e.subject_id = subjectID
+		  AND e.enroll_year = nYear AND e.enroll_semester = nSemester;
+		  
+	IF (nCnt>0)
+	THEN 
+		RAISE too_many_courses;
+	END IF;
+	
+	/*에러 처리3 : 수강 신청 인원 초과 여부*/
+	SELECT course_personnel
+	INTO nTeachMax
+	FROM COURSES c
+	WHERE c.subject_id = subjectID AND c.course_division = courseDivision;
+	
+	SELECT count(*)
+	INTO nCnt
+	FROM ENROLL e
+	WHERE e.enroll_year = nYear AND e.enroll_semester = nSemester 
+		AND e.subject_id = subjectID AND e.course_division = courseDivision;
+		
+	IF (nCnt >= nTeachMax)
+	THEN
+		RAISE too_many_students;
+	END IF;
+		
+	/*에러처리4 : 신청한 과목들 시간 중복 여부*/		
+	var dup_res NUMBER;
+	EXECUTE :dup_res := CheckTimeDuplicate(studentID,subjectID,course_division);
+		
+	IF (dup_res != 1) 
+	THEN 
+		RAISE duplicate_time;
+	END IF;
+	
+	/*수강 신청 등록*/
+	INSERT INTO ENROLL( subject_id,course_division,student_id,enroll_year,enroll_semester )
+	VALUES (subjectID,courseDivision,studentID,nYear,nSemester);
+	
+	COMMIT;
+	result:='수강신청 등록이 완료되었습니다.';
+	
+	EXCEPTION
+		WHEN too_many_sumCredit THEN
+			result:='최대학점을 초과했습니다.';
+		WHEN too_many_courses THEN
+			result:='이미 등록한 과목입니다.';
+		WHEN too_many_students THEN
+			result:='수강신청 인원이 초과했습니다.';
+		WHEN duplicate_time THEN
+			result:='시간표가 중복됩니다.';
+		WHEN OTHERS THEN
+			result:= SQLCODE;	 
+END;
+/
+
+
+CREATE OR REPLACE function CheckTimeDuplicate
+(
+	student_id in NUMBER,
+	subject_id in NUMBER,
+	course_division in NUMBER
+)
+RETURN NUMBER
+IS	    
+	CURSOR my_time_table IS
+	SELECT To_Char(c.course_start,'mmdd HH:MI') cStart, To_Char(c.course_end,'mmdd HH:MI') cEnd
+	FROM ENROLL e, COURSES c
+	WHERE e.subject_id = subject_id AND e.subject_id = c.subject_id
+	    AND e.course_division = course_division AND e.student_id = student_id
+	    AND e.course_division = c.course_division;
+	nStart varchar2(20);/*Type을 date time으로 해야하나...*/
+	nEnd varchar2(20);
+BEGIN
+	SELECT To_Char(c.course_start,'mmdd HH:MI'),To_Char(c.course_end,'mmdd HH:MI')
+	INTO nStart,nEnd
+	FROM COURSES c
+	WHERE c.subject_id = subject_id AND c.course_division = course_division;
+	
+	FOR my_cList IN my_time_table LOOP
+		IF( my_cList.cStart > nEnd OR my_cList.cEnd < nStart ) THEN RETURN 1;
+		ELSE RETURN 0;
+		END IF;
+	END LOOP;
+				
+END ;
+/
+
+
+
