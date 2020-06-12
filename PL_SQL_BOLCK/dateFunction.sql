@@ -5,7 +5,7 @@ IS
 BEGIN
   now_year := TO_NUMBER(dDate, 'YYYY');
 END;
-
+/
 CREATE OR REPLACE FUNCTION Date2EnrollSemester(dDate in DATE)
 RETURN number
 IS
