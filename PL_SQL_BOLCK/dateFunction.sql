@@ -14,3 +14,4 @@ BEGIN
   now_semester := TO_NUMBER(dDate, 'MM');
   --1, 2 semester 
 END;
+/
