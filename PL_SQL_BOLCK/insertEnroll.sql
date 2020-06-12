@@ -20,17 +20,18 @@ BEGIN
 	DBMS_OUTPUT.PUT_LINE(studentID ||'님이 과목 번호 '|| subjectID ||' 분반 ' || TO_CHAR(courseDivision) ||'의 수강 등록을 요청하셨습니다.');
 	/*년도 학기 알아내기*/
 	nYear := Date2EnrollYear(SYSDATE);
-	nSemenster := Date2EnrollSemester(SYSDATE);
+	nSemester := Date2EnrollSemester(SYSDATE);
 	/*예외 처리1 : 최대학점 초과 여부*/
+	
 	SELECT SUM(s.subject_credit)
 	INTO nSumCredit
 	FROM SUBJECTS s, ENROLL e
 	WHERE e.student_id = studentID AND e.enroll_year = nYear
-		  AND e.enroll_semester = nSemester AND s.subject_id = e.subject_id;/*분반 조건은 안함*/
+		  AND e.enroll_semester = nSemester AND s.subject_id = e.subject_id;
 		    
-	SELECT subject_creit
+	SELECT subject_credit
 	INTO nCredit
-	FROM SUBJECTS s, COURSE c
+	FROM SUBJECTS s, COURSES c
 	WHERE s.subject_id = subjectID AND s.subject_id = c.subject_id AND c.course_division = courseDivision;
 	
 	IF(nSumCredit + nCredit > 19)/*성적 넣지 않아 기본인 18로*/
@@ -68,10 +69,15 @@ BEGIN
 	END IF;
 		
 	/*에러처리4 : 신청한 과목들 시간 중복 여부*/		
-	var dup_res NUMBER;
-	EXECUTE :dup_res := CheckTimeDuplicate(studentID,subjectID,course_division);
-		
-	IF (dup_res != 1) 
+	
+	/*VAR dup_res NUMBER;
+	EXECUTE :nCnt := CheckTimeDuplicate(studentID,subjectID,course_division,nYear,nSemester);
+	*/
+	select CheckTimeDuplicate(studentID,subjectID,courseDivision,nYear,nSemester)
+	into nCnt
+	from dual;
+	
+	IF (nCnt != 1) 
 	THEN 
 		RAISE duplicate_time;
 	END IF;
@@ -98,46 +104,60 @@ END;
 /
 
 
-CREATE OR REPLACE function CheckTimeDuplicate
+
+
+
+
+
+
+
+
+CREATE OR REPLACE FUNCTION CheckTimeDuplicate
 (
 	student_id in NUMBER,
 	subject_id in NUMBER,
-	course_division in NUMBER
+	course_division in NUMBER,
+	nYear NUMBER,
+	nSemester in NUMBER
 )
 RETURN NUMBER
 IS	    
 	CURSOR my_time_table IS
-	SELECT c.course_start1 as str1 AND c.course_end1 as end1
-			 AND NVL(c.course_start2,00000) as str2 AND NVL(c.course_end2,00000) as end1
-	FROM ENROLL e, COURSES c
-	WHERE e.subject_id = subject_id AND e.subject_id = c.subject_id
-	    AND e.course_division = course_division AND e.student_id = student_id
-	    AND e.course_division = c.course_division;
+		SELECT c.course_start1 str1, c.course_end1 end1, NVL(c.course_start2,00000) str2, NVL(c.course_end2,00000) end2
+		FROM COURSES c
+		WHERE c.subject_id in 
+		(
+			SELECT e.subject_id
+			FROM ENROLL e
+			WHERE  e.enroll_year = nYear AND e.enroll_semester = nSemester 
+				AND e.subject_id = subject_id AND e.course_division = course_division
+				AND e.student_id = student_id
+		);
+		
 	nStr1 number;
 	nEnd1 number;
 	nStr2 number;
 	nEnd2 number;
 BEGIN
-	SELECT c.course_start1 AND c.course_end1 
-			 AND NVL(c.course_start2,00000) AND NVL(c.course_end2,00000)
+	SELECT c.course_start1, c.course_end1,NVL(c.course_start2,00000), NVL(c.course_end2,00000)
 	INTO nStr1,nEnd1,nStr2,nEnd2
 	FROM COURSES c
 	WHERE c.subject_id = subject_id AND c.course_division = course_division;
 	
-	FOR my_cList IN my_time_table LOOP
+	
+	FOR my_cList IN my_time_table 
+	LOOP
 		IF( my_cList.str1 < nEnd1 AND my_cList.end1 > nStr1) THEN	
 			RETURN 0;
 		ELSIF (my_cList.str2 < nEnd1 AND my_cList.end2 > nStr1)THEN
 			RETURN 0;
-		ELSIF ( my_cList.str2 < nEnd1 AND my_cList.end2 > nStr1)THEN
+		ELSIF (my_cList.str2 < nEnd1 AND my_cList.end2 > nStr1)THEN
 			RETURN 0;
-		ELSIF ( my_cList.str2 < nEnd2 AND my_cList.end2 > nStr2)THEN
+		ELSIF (my_cList.str2 < nEnd2 AND my_cList.end2 > nStr2)THEN
 			RETURN 0;
 		ELSE RETURN 1;
 		END IF;
-	END LOOP;				
+	END LOOP;	
+			
 END ;
 /
-
-
-
