@@ -7,7 +7,7 @@
     invalid_value       EXCEPTION;
     nLength             NUMBER;
     nBlank              NUMBER;
-  BGIN
+  BEGIN
     nLength := LENGTH(:new.student_pw);
     nBlank := LENGTH(:new.student_pw)-LENGTH(REPLACE(:new.student_pw,′ ′,′′));
     
@@ -27,5 +27,5 @@
       WHEN OTHERS THEN
       NULL;
   END; /
-                                              
+                                                     
                                                       
