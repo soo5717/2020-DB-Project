@@ -13,7 +13,7 @@ IS
   now_semester number;
 BEGIN
   now_month := TO_NUMBER(dDate, 'MM');
-  --1, 2 semester 
+
   IF (now_month >=11 and now_month <=12 ) THEN
     now_semester := 1;
   ELSE IF (now_month >=1 and now_month <= 4) THEN
