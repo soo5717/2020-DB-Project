@@ -8,8 +8,8 @@
     nLength             NUMBER;
     nBlank              NUMBER;
   BGIN
-    nLength := LENGTH(:new.student_pwd);
-    nBlank := LENGTH(:new.student_pwd)-LENGTH(REPLACE(:new.student_pwd,′ ′,′′));
+    nLength := LENGTH(:new.student_pw);
+    nBlank := LENGTH(:new.student_pw)-LENGTH(REPLACE(:new.student_pwd,′ ′,′′));
     
     IF (nLength < 4) THEN
       RAISE underflow_length;
