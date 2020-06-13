@@ -36,5 +36,5 @@ INSERT INTO subjects VALUES (1843, '데이터사이언스개론', 3, 1, '전공'
 INSERT INTO subjects VALUES (1844, '데이터베이스설계', 3, 1, '전공');
 INSERT INTO subjects VALUES (1845, '컴퓨터그래픽스', 3, 1, '전공');
 INSERT INTO subjects VALUES (1846, '컴퓨터시스템', 3, 1, '전공');
-INSERT INTO subjects VALUES (1837, '임베디드', 3, 1, '전공');
-INSERT INTO subjects VALUES (1838, '데이터마이닝', 3, 1, '전공');
+INSERT INTO subjects VALUES (1847, '임베디드', 3, 1, '전공');
+INSERT INTO subjects VALUES (1848, '데이터마이닝', 3, 1, '전공');
