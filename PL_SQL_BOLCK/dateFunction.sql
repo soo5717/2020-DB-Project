@@ -4,6 +4,7 @@ IS
   now_year number;
 BEGIN
   now_year := TO_NUMBER(TO_CHAR(dDate, 'YYYY'));
+  RETURN now_year;
 END;
 /
 CREATE OR REPLACE FUNCTION Date2EnrollSemester(dDate in DATE)
@@ -21,5 +22,6 @@ BEGIN
   ELSE
     now_semester:= 2;
   END IF;
+RETURN now_semester;
 END;
 /
