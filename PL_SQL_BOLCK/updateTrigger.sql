@@ -1,4 +1,4 @@
-  CREATE OR REPLACE TRIGGER BeforeUpdateStudent
+ CREATE OR REPLACE TRIGGER BeforeUpdateStudent
   BEFORE
   UPDATE ON students
   FOR EACH ROW
@@ -9,7 +9,7 @@
     nBlank              NUMBER;
   BEGIN
     nLength := LENGTH(:new.student_pw);
-    nBlank := LENGTH(:new.student_pw)-LENGTH(REPLACE(:new.student_pw,′ ′,′′));
+    nBlank := LENGTH(:new.student_pw)-LENGTH(REPLACE(:new.student_pw,' ', ''));
     
     IF (nLength < 4) THEN
       RAISE underflow_length;
@@ -23,9 +23,7 @@
       WHEN underflow_length THEN
         RAISE_APPLICATION_ERROR('암호는 4자리 이상이어야 합니다', -20002);
       WHEN invalid_value THEN
-        RAISE_APPLICATION_ERROR('암호에 공란은 입력되지 않습니다.', -20003);
+        RAISE_APPLICATION_ERROR('암호에 공란은 입력되지 않습니다', -20003);
       WHEN OTHERS THEN
       NULL;
-  END; /
-                                                     
-                                                      
+  END;
