@@ -16,7 +16,7 @@ BEGIN
 
   IF (now_month >=11 and now_month <=12 ) THEN
     now_semester := 1;
-  ELSEIF (now_month >=1 and now_month <= 4) THEN
+  ELSIF (now_month >=1 and now_month <= 4) THEN
     now_semester := 1;
   ELSE
     now_semester:= 2;
