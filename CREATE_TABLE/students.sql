@@ -1,4 +1,4 @@
-CREATE TABLE STUDENTS(
+CREATE OR REPLACE TABLE STUDENTS(
 	student_id number NOT NULL,
 	student_pw varchar2(30) NOT NULL,
 	student_name varchar2(30) NOT NULL,
