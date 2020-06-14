@@ -34,7 +34,13 @@ BEGIN
 	FROM SUBJECTS s, COURSES c
 	WHERE s.subject_id = subjectID AND s.subject_id = c.subject_id AND c.course_division = courseDivision;
 	
-	IF(nSumCredit + nCredit > 19)/*성적 넣지 않아 기본인 18로*/
+	/*19가 아닌 학생 기준으로 가져오기*/
+	SELECT student_credit
+	INTO nCnt
+	FROM STUDENTS
+	WHERE STUDENTS.student_id = studentID; 
+	
+	IF(nSumCredit + nCredit > nCnt)/*성적 넣지 않아 기본인 18로*/
 	THEN 
 		RAISE too_many_sumCredit;
 	END IF;
