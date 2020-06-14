@@ -10,7 +10,7 @@ create table COURSES(
   room_name varchar(30) not null, 
   CONSTRAINT courses_pk PRIMARY KEY (subject_id, course_division),
   CONSTRAINT courses_fk_sbj FOREIGN KEY(subject_id) REFERENCES subjects(subject_id),
-  CONSTRAINT courses_fk_prf FOREIGN KEY(professor_id) REFERENCES porfessors(professor_id)
+  CONSTRAINT courses_fk_prf FOREIGN KEY(professor_id) REFERENCES professors(professor_id)
 );
 
 INSERT INTO courses VALUES (109, 1001, 1, 21700 ,21800, 41700, 41800, 3, '프라임관 203호');
