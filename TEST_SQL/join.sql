@@ -14,12 +14,25 @@
 --     AND c.subject_id = s.subject_id
 --     AND p.department_id = d.department_id;
 
-SELECT s.subject_id, s.subject_name, 
-    c.course_division, s.subject_credit, 
-    c.room_name, c.course_start1, c.course_end1, c.course_start2, c.course_end2
-FROM ENROLL e, COURSES c, SUBJECTS s
-WHERE e.enroll_year = 2020
-    AND e.enroll_semester = 1
-    AND e.subject_id = c.subject_id
-    AND e.course_division = c.course_division
-    AND c.subject_id = s.subject_id;
+-- SELECT s.subject_id, s.subject_name, 
+--     c.course_division, s.subject_credit, 
+--     c.room_name, c.course_start1, c.course_end1, c.course_start2, c.course_end2
+-- FROM ENROLL e, COURSES c, SUBJECTS s
+-- WHERE e.enroll_year = 2020
+--     AND e.enroll_semester = 1
+--     AND e.subject_id = c.subject_id
+--     AND e.course_division = c.course_division
+--     AND c.subject_id = s.subject_id;
+
+SELECT s.subject_id, s.subject_name, c.course_division, d.department_name,
+            s.subject_group, s.subject_credit, p.professor_name,
+            c.course_start1, c.course_end1, c.course_start2, c.course_end2
+        FROM ENROLL e, COURSES c, SUBJECTS s, DEPARTMENTS d, PROFESSORS p
+        WHERE e.student_id = 1812357
+            AND e.enroll_year = 2020
+            AND e.enroll_semester = 1
+            AND e.subject_id = c.subject_id
+            AND e.course_division = c.course_division
+            AND c.subject_id = s.subject_id
+            AND c.professor_id = p.professor_id
+            AND s.department_id = d.department_id;
