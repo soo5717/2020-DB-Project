@@ -1,15 +1,15 @@
 CREATE OR REPLACE FUNCTION Date2EnrollYear(dDate in DATE)
 RETURN number
 IS
-  now_year number;
-  check_year number;
+	now_year number;
+	check_year number;
 BEGIN
-  now_year := TO_NUMBER(TO_CHAR(dDate, 'YYYY'));
-  check_year := TO_NUMBER(TO_CHAR(dDate, 'MM'));
-  if(check_year>=11 and check_year <=12) THEN
-				  now_year := now_year+1;
-  ENDIF;
-  RETURN now_year;
+	now_year := TO_NUMBER(TO_CHAR(dDate, 'YYYY'));
+	check_year := TO_NUMBER(TO_CHAR(dDate, 'MM'));
+	IF (check_year >=11 and check_year <=12) THEN
+		now_year := now_year +1;
+	END IF;
+	RETURN now_year;
 END;
 /
 CREATE OR REPLACE FUNCTION Date2EnrollSemester(dDate in DATE)
