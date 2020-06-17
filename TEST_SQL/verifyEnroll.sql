@@ -60,7 +60,7 @@ BEGIN
     RETURN;   
 END;
 /
+
 -- 테스트 용 : enroll(insert.sql) 테이블에 추가한 후에 가능
 select * 
 from table(SelectTimeTable(1812357, 2020, 1));
-/

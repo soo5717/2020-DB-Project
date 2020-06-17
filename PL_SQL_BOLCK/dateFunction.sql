@@ -1,3 +1,4 @@
+-- 해당 년도 반환 함수
 CREATE OR REPLACE FUNCTION Date2EnrollYear(dDate in DATE)
 RETURN number
 IS
@@ -12,6 +13,7 @@ BEGIN
 	RETURN now_year;
 END;
 /
+-- 해당 학기 반환 함수
 CREATE OR REPLACE FUNCTION Date2EnrollSemester(dDate in DATE)
 RETURN number
 IS
@@ -30,7 +32,8 @@ BEGIN
 RETURN now_semester;
 END;
 /
-/*substr 버전*/
+-- 시간, 장소 출력 형식 변경 함수 : substr 버전
+-- verifyEnroll.sql에서 사용됨.
 CREATE OR REPLACE FUNCTION Number2TableTime(
 c_start in number,
 c_end in number,
