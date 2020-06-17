@@ -1,3 +1,4 @@
+-- 5번 생성
 create table COURSES(
   professor_id number not null, 
   subject_id number not null, 
@@ -7,7 +8,7 @@ create table COURSES(
   course_start2 number,
   course_end2 number,
   course_personnel number not null,
-  course_room varchar(30) not null, 
+  course_room varchar2(30) not null, 
   CONSTRAINT course_pk PRIMARY KEY (subject_id, course_division),
   CONSTRAINT course_fk_sbj FOREIGN KEY(subject_id) REFERENCES subjects(subject_id),
   CONSTRAINT course_fk_prf FOREIGN KEY(professor_id) REFERENCES professors(professor_id)

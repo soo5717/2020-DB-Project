@@ -1,3 +1,4 @@
+-- 3번 생성
 CREATE TABLE STUDENTS(
 	student_id number NOT NULL,
 	student_pw varchar2(30) NOT NULL,

@@ -1,3 +1,4 @@
+-- 1번 생성
 CREATE TABLE DEPARTMENTS(
 	department_id number NOT NULL,
 	department_name varchar2(100) NOT NULL,

@@ -1,3 +1,4 @@
+-- 4번 생성
 CREATE TABLE SUBJECTS(
 	subject_id number NOT NULL,
 	subject_name varchar2(100) NOT NULL,

@@ -1,3 +1,4 @@
+-- 2번 생성
 CREATE TABLE PROFESSORS(
 	professor_id number NOT NULL,
 	professor_name varchar2(30) NOT NULL,

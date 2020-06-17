@@ -1,3 +1,4 @@
+-- 6번 생성
 create table ENROLL(
   subject_id number not null, 
   course_division number not null, 
