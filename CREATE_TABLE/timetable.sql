@@ -12,7 +12,8 @@ SELECT
     c.course_end1,
     NVL(c.course_end2, 0) course_end2,
     e.enroll_year,
-    e.enroll_semester
+    e.enroll_semester,
+    s.subject_credit
 FROM
     enroll e, 
     subjects s,
