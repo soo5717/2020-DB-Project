@@ -5,7 +5,7 @@ CREATE TABLE SUBJECTS(
 	department_id number NOT NULL,
 	subject_group varchar2(20) NOT NULL,
 	CONSTRAINT subject_pk PRIMARY KEY(subject_id),
-	CONSTRAINT subject_fk3 FOREIGN KEY (department_id) REFERENCES DEPARTMENTS(department_id)
+	CONSTRAINT subject_fk FOREIGN KEY (department_id) REFERENCES DEPARTMENTS(department_id)
 );
 
 INSERT INTO subjects VALUES (1001,'암의 이해', 2, 3,'교양'); 

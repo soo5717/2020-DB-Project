@@ -6,8 +6,8 @@ CREATE TABLE STUDENTS(
 	student_credit number DEFAULT 19 NOT NULL,
 	department_id number NOT NULL,
 	student_address varchar2(100),
-	CONSTRAINT students_pk PRIMARY KEY(student_id),
-	CONSTRAINT students_fk FOREIGN KEY (department_id) REFERENCES DEPARTMENTS(department_id)
+	CONSTRAINT student_pk PRIMARY KEY(student_id),
+	CONSTRAINT student_fk FOREIGN KEY (department_id) REFERENCES DEPARTMENTS(department_id)
 );
 
 INSERT INTO students VALUES (1700000,'0000','김현진', 7, 19, 1, '경기도 고양시 일산 동구');
