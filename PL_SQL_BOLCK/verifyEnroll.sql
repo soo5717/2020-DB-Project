@@ -10,6 +10,7 @@ CREATE OR REPLACE PROCEDURE Select2TimeTable(
 )
 IS
     course_time VARCHAR2(70);
+    v_group VARCHAR2(20);
 
     CURSOR time_table(v_s_id NUMBER, v_year NUMBER, v_semester NUMBER) IS
         SELECT s.subject_id, s.subject_name, c.course_division, d.department_name,
@@ -33,10 +34,17 @@ BEGIN
         -- 시간 변환 부분 
         course_time := Number2TableTime(t.course_start1, t.course_end1, 
                                         t.course_start2, t.course_end2, t.course_room);
+        -- 교양, 전공 변환 부분
+        IF (t.subject_group = 0) THEN
+            v_group := '교양';
+        ELSE
+            v_group := '전공';
+        END IF;
+
         -- 시간표 정보 출력 부분
         DBMS_OUTPUT.PUT_LINE(t.subject_id || ' | ' || t.subject_name || ' | ' 
                             || t.course_division || ' | ' || t.department_name || ' | ' 
-                            || t.subject_group || ' | ' || t.subject_credit || ' | ' 
+                            || v_group || ' | ' || t.subject_credit || ' | ' 
                             || t.professor_name || ' | ' || course_time);
         
         cnt_subject := cnt_subject + 1;

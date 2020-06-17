@@ -54,7 +54,8 @@ IS
     			c.course_start1,c.course_end1,NVL(c.course_start2,00000) course_start2 , NVL(c.course_end2,00000) course_end2,
     			c.course_room,s.subject_credit,c.course_personnel,c.professor_id
     	FROM COURSES c, SUBJECTS s
-    	WHERE c.subject_id = s.subject_id
+    	WHERE s.subject_group = 1
+			AND c.subject_id = s.subject_id
     		AND s.department_id in 
     			(SELECT department_id
     			 FROM STUDENTS
@@ -65,7 +66,8 @@ IS
 				c.course_start1,c.course_end1,NVL(c.course_start2,00000) course_start2 , NVL(c.course_end2,00000) course_end2,
 				c.course_room,s.subject_credit,c.course_personnel,c.professor_id
 		FROM COURSES c, SUBJECTS s
-		WHERE c.subject_id = s.subject_id
+		WHERE s.subject_group = 1
+			AND c.subject_id = s.subject_id
 			AND s.department_id not in 
 				(SELECT department_id
 					FROM STUDENTS
@@ -126,5 +128,15 @@ END;
 /
 
 -- 테스트 용 : enroll(insert.sql) 테이블에 추가한 후에 가능
+-- 교양: 0
+select * 
+from table(SelectEnrollTable(1812357, 0));
+-- 전공: 1
 select * 
 from table(SelectEnrollTable(1812357, 1));
+-- 전체: 2
+select * 
+from table(SelectEnrollTable(1812357, 2));
+-- 타전공: 3
+select * 
+from table(SelectEnrollTable(1812357, 3));
