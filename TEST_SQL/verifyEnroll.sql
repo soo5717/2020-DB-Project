@@ -1,5 +1,5 @@
--- 수강취소/수강조회에 사용되는 함수
--- 순차적으로 끊어서 1, 2, 3번 실행시키면 됩니다
+-- 수강취소/수강조회 목록 조회 함수
+-- 순차적으로 끊어서 1, 2, 3번 실행시키면 됩니다!
 
 -- 1번 : Return을 위한 Object 생성
 CREATE OR REPLACE TYPE enroll_type AS OBJECT(
