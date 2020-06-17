@@ -1,5 +1,7 @@
+-- 수강취소/수강조회에 사용되는 함수
 -- 순차적으로 끊어서 1, 2, 3번 실행시키면 됩니다
--- 1번 
+
+-- 1번 : Return을 위한 Object 생성
 CREATE OR REPLACE TYPE enroll_type AS OBJECT(
     subject_id NUMBER,
     subject_name VARCHAR2(100),
@@ -10,10 +12,12 @@ CREATE OR REPLACE TYPE enroll_type AS OBJECT(
     professor_name VARCHAR2(30),
     course_time VARCHAR2(70)
 );
--- 2번
+
+-- 2번 : Collection Type 생성
 CREATE OR REPLACE TYPE enroll_table
     AS TABLE OF enroll_type;
--- 3번
+
+-- 3번 : Function 생성
 CREATE OR REPLACE FUNCTION SelectTimeTable(
         sStudentId NUMBER,
         nYear NUMBER,
@@ -23,10 +27,11 @@ CREATE OR REPLACE FUNCTION SelectTimeTable(
     PIPELINED
 IS
     v_enroll enroll_type;
+    course_time VARCHAR2(70);
 
     CURSOR time_table(v_s_id NUMBER, v_year NUMBER, v_semester NUMBER) IS
         SELECT s.subject_id, s.subject_name, c.course_division, d.department_name,
-            s.subject_group, s.subject_credit, p.professor_name, c.course_room
+            s.subject_group, s.subject_credit, p.professor_name, c.course_room,
             c.course_start1, c.course_end1,
             NVL(c.course_start2, 00000) course_start2, NVL(c.course_end2, 00000) course_end2
         FROM ENROLL e, COURSES c, SUBJECTS s, DEPARTMENTS d, PROFESSORS p

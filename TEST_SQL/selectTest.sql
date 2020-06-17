@@ -1,4 +1,4 @@
--- 테이블 select문 수행
+-- 전체 테이블 select문 수행
 SELECT * FROM DEPARTMENTS;
 SELECT * FROM STUDENTS;
 SELECT * FROM PROFESSORS;
