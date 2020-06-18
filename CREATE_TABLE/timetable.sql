@@ -24,7 +24,7 @@ WHERE
     AND e.subject_id = c.subject_id
     AND e.course_division = c.course_division
     AND c.professor_id = p.professor_id
-    AND s.subject_id = c.subject_id
+    AND s.subject_id = c.subject_id with check option
 ;
 
 --시작 전에 각자 계정이 권한 부여 필요
