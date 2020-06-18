@@ -8,7 +8,7 @@ SELECT
     p.professor_name,
     c.room_name,
     c.course_start1,
-    NVL(c.course_start2, 0) ourse_start2,
+    NVL(c.course_start2, 0) course_start2,
     c.course_end1,
     NVL(c.course_end2, 0) course_end2,
     e.enroll_year,
