@@ -25,8 +25,10 @@ BEGIN
 	/*예외 처리1 : 최대학점 초과 여부*/
 	SELECT SUM(s.subject_credit)
 	INTO nSumCredit
-	FROM SUBJECTS s, ENROLL e
-	WHERE e.student_id = studentID AND e.enroll_year = nYear
+	FROM ENROLL e,Subjects s
+	WHERE e.student_id = studentID
+		AND s.subject_id = e.subject_id 
+		AND e.enroll_year = nYear
 		  AND e.enroll_semester = nSemester;
 		    
 		  
