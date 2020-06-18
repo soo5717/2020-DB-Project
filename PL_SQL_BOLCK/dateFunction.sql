@@ -70,11 +70,11 @@ BEGIN
 	  	
 	  	IF day != 0 THEN
 			res := res || d_arr( day );
-			tmp := trunc(to_number(t_arr(i)), -2)/100 ;
+			tmp := mod(trunc(to_number(t_arr(i)), -2)/100,100) ;
 			IF tmp < 10 THEN
 				res := res || '0' || tmp ||':' ;
 			ELSE
-				res := res || tmp ||':'  || mod( to_number(t_arr(i)) ,100  ) ||'-' ;
+				res := res || tmp ||':' ;
 			END IF;
 			tmp :=  mod( to_number(t_arr(i)) ,100  );
 			IF tmp < 10 THEN
@@ -91,7 +91,7 @@ BEGIN
   RETURN res;
 END;
 / 
-
+					       
 --출력 확인 데이터
 select Number2TableTime(10905,10930,21100,21605,'hello')
 from dual;
