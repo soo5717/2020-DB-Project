@@ -9,11 +9,7 @@ CREATE OR REPLACE TYPE SHOW_ENROLL_TYPE AS OBJECT
 	course_division NUMBER,
 	dep_name VARCHAR2(100),
 	subject_group VARCHAR2(20),
-	course_start1 NUMBER,
-	course_end1 NUMBER,
-	course_start2 NUMBER,
-	course_end2 NUMBER,
-	course_room VARCHAR2(30),
+	course_time VARCHAR2(70),
 	subject_credit NUMBER,
 	course_personnel NUMBER,
 	course_remain NUMBER,
@@ -37,7 +33,9 @@ IS
 	sql_string VARCHAR2(500);
     nYear NUMBER;
 	nSemester NUMBER;/*현재 학기*/
-	nCnt NUMBER :=0;	
+	nCnt NUMBER :=0;
+	course_time VARCHAR2(70);
+	v_group VARCHAR2(20);
 	
 	-- 교양과 전체인 경우
     CURSOR time_table1(g_id NUMBER) IS
@@ -76,8 +74,8 @@ BEGIN
 	-- 년도 학기 알아내기 --> 필요할까
 	nYear := Date2EnrollYear(SYSDATE);
 	nSemester := Date2EnrollSemester(SYSDATE);
-	
-	IF sGroupId = 0 OR sGroupId = 2 THEN
+	-- 교양 / 전체
+	IF sGroupId = 0 OR sGroupId = 2 THEN 
 		FOR t IN time_table1(sGroupId) LOOP
 			SELECT COUNT(*)
 			INTO nCnt
@@ -86,12 +84,21 @@ BEGIN
 				AND e.course_division = t.course_division
 				AND e.enroll_year = nYear 
 				AND e.enroll_semester = nSemester;
+			-- 시간 변환 부분 
+        	course_time := Number2TableTime(t.course_start1, t.course_end1, 
+                                        t.course_start2, t.course_end2, t.course_room);
+			-- 교양, 전공 변환 부분
+			IF (t.subject_group = 0) THEN
+				v_group := '교양';
+			ELSE
+				v_group := '전공';
+			END IF;
 			nCnt := t.course_personnel - nCnt;
-			enroll_list := SHOW_ENROLL_TYPE(t.subject_name,t.subject_id,t.course_division,t.department_id,t.subject_group,
-    			t.course_start1,t.course_end1, t.course_start2,t.course_end2, t.course_room , t.subject_credit,
-    			t.course_personnel, nCnt ,t.professor_id);
+			enroll_list := SHOW_ENROLL_TYPE(t.subject_name,t.subject_id,t.course_division,t.department_id,v_group,
+    			course_time , t.subject_credit, t.course_personnel, nCnt ,t.professor_id);
     		PIPE ROW(enroll_list);
-        END LOOP;	
+        END LOOP;
+	-- 전공 
 	ELSIF sGroupId = 1 THEN
 		FOR t IN time_table2(sStudentId) LOOP
 			SELECT COUNT(*)
@@ -101,12 +108,21 @@ BEGIN
 				AND e.course_division = t.course_division
 				AND e.enroll_year = nYear 
 				AND e.enroll_semester = nSemester;
+			-- 시간 변환 부분 
+        	course_time := Number2TableTime(t.course_start1, t.course_end1, 
+                                        t.course_start2, t.course_end2, t.course_room);
+			-- 교양, 전공 변환 부분
+			IF (t.subject_group = 0) THEN
+				v_group := '교양';
+			ELSE
+				v_group := '전공';
+			END IF;
 			nCnt := t.course_personnel - nCnt;
-			enroll_list := SHOW_ENROLL_TYPE(t.subject_name,t.subject_id,t.course_division,t.department_id,t.subject_group,
-    			t.course_start1,t.course_end1,t.course_start2,t.course_end2,t.course_room ,t.subject_credit,
-    			t.course_personnel, nCnt ,t.professor_id);
+			enroll_list := SHOW_ENROLL_TYPE(t.subject_name,t.subject_id,t.course_division,t.department_id,v_group,
+    			course_time ,t.subject_credit, t.course_personnel, nCnt ,t.professor_id);
     		PIPE ROW(enroll_list);
-        END LOOP;	
+        END LOOP;
+	-- 타전공 
     ELSIF sGroupId = 3 THEN
 		FOR t IN time_table3(sStudentId) LOOP
 			SELECT COUNT(*)
@@ -116,10 +132,18 @@ BEGIN
 				AND e.course_division = t.course_division
 				AND e.enroll_year = nYear 
 				AND e.enroll_semester = nSemester;
+			-- 시간 변환 부분 
+        	course_time := Number2TableTime(t.course_start1, t.course_end1, 
+                                        t.course_start2, t.course_end2, t.course_room);
+			-- 교양, 전공 변환 부분
+			IF (t.subject_group = 0) THEN
+				v_group := '교양';
+			ELSE
+				v_group := '전공';
+			END IF;
 			nCnt := t.course_personnel - nCnt;
-			enroll_list := SHOW_ENROLL_TYPE(t.subject_name,t.subject_id,t.course_division,t.department_id,t.subject_group,
-    			t.course_start1,t.course_end1,t.course_start2,t.course_end2,t.course_room ,t.subject_credit,
-    			t.course_personnel, nCnt ,t.professor_id);
+			enroll_list := SHOW_ENROLL_TYPE(t.subject_name,t.subject_id,t.course_division,t.department_id,v_group,
+    			course_time ,t.subject_credit, t.course_personnel, nCnt ,t.professor_id);
     		PIPE ROW(enroll_list);
         END LOOP;	
 	END IF;
