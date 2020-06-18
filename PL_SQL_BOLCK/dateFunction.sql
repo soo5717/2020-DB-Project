@@ -33,7 +33,7 @@ RETURN now_semester;
 END;
 /
 -- 시간, 장소 출력 형식 변경 함수 : substr 버전
--- verifyEnroll.sql에서 사용됨.
+-- verifyEnroll.sql과 showEnroll.sql에서 사용됨.
 CREATE OR REPLACE FUNCTION Number2TableTime(
 c_start in number,
 c_end in number,
