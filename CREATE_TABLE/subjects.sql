@@ -4,7 +4,7 @@ CREATE TABLE SUBJECTS(
 	subject_name varchar2(100) NOT NULL,
 	subject_credit number NOT NULL,
 	department_id number NOT NULL,
-	subject_group number NOT NULL,
+	subject_group number NOT NULL CONSTRAINT subject_ck CHECK (subject_group >=0 and subject_group<=1),
 	CONSTRAINT subject_pk PRIMARY KEY(subject_id),
 	CONSTRAINT subject_fk FOREIGN KEY (department_id) REFERENCES DEPARTMENTS(department_id)
 );
