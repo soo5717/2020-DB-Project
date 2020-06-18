@@ -162,15 +162,13 @@ BEGIN
 		DBMS_OUTPUT.PUT_LINE('비교 시간 : ' || t.str1 );
 		
 		IF (t.str1 < nEnd1 AND t.end1 > nStr1) THEN
-				res := res + 1;
-			--RETURN 1; --시간 중복
+			RETURN 1; --시간 중복
 		ELSIF t.str2 < nEnd1 AND t.end2 > nStr1 THEN
-			res := res + 1;--RETURN 1;
+			RETURN 1;
 		ELSIF t.str2 < nEnd1 AND t.end2 > nStr1 THEN
-			res := res + 1;--RETURN 1;
+			RETURN 1;
 		ELSIF t.str2 < nEnd2 AND t.end2 > nStr2 THEN
-			res := res + 1;--RETURN 1;
-			
+			RETURN 1;		
 		END IF;
 	END LOOP;	
 	return res;			
