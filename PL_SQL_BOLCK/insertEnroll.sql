@@ -22,18 +22,19 @@ BEGIN
 	/*년도 학기 알아내기*/
 	nYear := Date2EnrollYear(SYSDATE);
 	nSemester := Date2EnrollSemester(SYSDATE);
-	/*예외 처리1 : 최대학점 초과 여부*/
 	
+	/*예외 처리1 : 최대학점 초과 여부*/
 	SELECT SUM(s.subject_credit)
 	INTO nSumCredit
 	FROM SUBJECTS s, ENROLL e
 	WHERE e.student_id = studentID AND e.enroll_year = nYear
-		  AND e.enroll_semester = nSemester AND s.subject_id = e.subject_id;
+		  AND e.enroll_semester = nSemester;
 		    
+		  
 	SELECT subject_credit
 	INTO nCredit
-	FROM SUBJECTS s, COURSES c
-	WHERE s.subject_id = subjectID AND s.subject_id = c.subject_id AND c.course_division = courseDivision;
+	FROM SUBJECTS s
+	WHERE s.subject_id = subjectID;
 	
 	/*19가 아닌 학생 기준으로 가져오기*/
 	SELECT student_credit
@@ -53,7 +54,7 @@ BEGIN
 	WHERE e.student_id = studentID AND e.subject_id = subjectID
 		  AND e.enroll_year = nYear AND e.enroll_semester = nSemester;
 		  
-	IF (nCnt>0)
+	IF (nCnt > 0)
 	THEN 
 		RAISE too_many_courses;
 	END IF;
@@ -78,19 +79,19 @@ BEGIN
 	/*에러처리4 : 신청한 과목들 시간 중복 여부*/		
 	
 	/*VAR dup_res NUMBER;
-	EXECUTE :nCnt := CheckTimeDuplicate(studentID,subjectID,course_division,nYear,nSemester);
+	EXECUTE :nCnt := CheckTimeDuplicate(:studentID, :subjectID, :course_division, :nYear, :nSemester);
 	*/
 	select CheckTimeDuplicate(studentID,subjectID,courseDivision,nYear,nSemester)
 	into nCnt
 	from dual;
 	
-	IF (nCnt != 1) 
+	IF (nCnt > 0) 
 	THEN 
 		RAISE duplicate_time;
 	END IF;
 	
 	/*수강 신청 등록*/
-	INSERT INTO ENROLL( subject_id,course_division,student_id,enroll_year,enroll_semester )
+	INSERT INTO ENROLL( subject_id, course_division, student_id, enroll_year, enroll_semester )
 	VALUES (subjectID,courseDivision,studentID,nYear,nSemester);
 	
 	COMMIT;
@@ -109,15 +110,6 @@ BEGIN
 			result:= SQLCODE;	 
 END;
 /
-
-
-
-
-
-
-
-
-
 
 CREATE OR REPLACE FUNCTION CheckTimeDuplicate
 (
@@ -155,14 +147,14 @@ BEGIN
 	FOR my_cList IN my_time_table 
 	LOOP
 		IF( my_cList.str1 < nEnd1 AND my_cList.end1 > nStr1) THEN	
-			RETURN 0;
+			RETURN 1; --시간 중복
 		ELSIF (my_cList.str2 < nEnd1 AND my_cList.end2 > nStr1)THEN
-			RETURN 0;
+			RETURN 1;
 		ELSIF (my_cList.str2 < nEnd1 AND my_cList.end2 > nStr1)THEN
-			RETURN 0;
+			RETURN 1;
 		ELSIF (my_cList.str2 < nEnd2 AND my_cList.end2 > nStr2)THEN
-			RETURN 0;
-		ELSE RETURN 1;
+			RETURN 1;
+		ELSE RETURN 0;--시간 중복 아님
 		END IF;
 	END LOOP;	
 			
