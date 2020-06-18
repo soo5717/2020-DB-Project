@@ -117,7 +117,7 @@ CREATE OR REPLACE FUNCTION CheckTimeDuplicate
 	student_id in NUMBER,
 	subject_id in NUMBER,
 	course_division in NUMBER,
-	nYear NUMBER,
+	nYear in NUMBER,
 	nSemester in NUMBER
 )
 RETURN NUMBER
