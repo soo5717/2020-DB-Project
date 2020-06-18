@@ -4,7 +4,7 @@ create table ENROLL(
   course_division number not null, 
   student_id number not null, 
   enroll_year number not null,
-  enroll_semester number not null
+  enroll_semester number not null,
 
   CONSTRAINT enroll_pk PRIMARY KEY (subject_id, student_id), 
   CONSTRAINT enroll_fk_std FOREIGN KEY (student_id) REFERENCES students(student_id), 
