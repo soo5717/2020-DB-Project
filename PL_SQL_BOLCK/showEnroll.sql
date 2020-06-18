@@ -16,13 +16,17 @@ CREATE OR REPLACE TYPE SHOW_ENROLL_TYPE AS OBJECT
 	course_remain NUMBER,--여석
 	professor_name VARCHAR2(30)
 );
+/
 
 -- 2번 : Collection Type 생성
 CREATE OR REPLACE TYPE SHOW_ENROLL_TABLE AS TABLE OF SHOW_ENROLL_TYPE;
+/
 
 -- 3번 : Function 생성
 -- sGroupId : 교양 0, 전공 1, 전체 2, 타전공 3
 -- Table Data에는 0, 1만 들어감!
+
+
 CREATE OR REPLACE FUNCTION SelectEnrollTable(
     sStudentId IN NUMBER, 
 	sGroupId IN NUMBER
@@ -44,11 +48,10 @@ IS
      CURSOR time_table1(g_id NUMBER) IS
         SELECT s.subject_name, s.subject_id,  c.course_division, d.department_name,
             s.subject_group, c.course_start1, c.course_end1,
-            NVL(c.course_start2, 00000) course_start2, NVL(c.course_end2, 00000) course_end2
-            s.subject_credit, c.course_room, p.professor_name
+            NVL(c.course_start2, 00000) course_start2, NVL(c.course_end2, 00000) course_end2,
+            s.subject_credit, c.course_room, c.course_personnel, p.professor_name
         FROM COURSES c, SUBJECTS s, DEPARTMENTS d, PROFESSORS p
-        WHERE 
-            AND c.subject_id = s.subject_id
+        WHERE c.subject_id = s.subject_id
             AND c.professor_id = p.professor_id
             AND s.department_id = d.department_id
             AND s.subject_group <= g_id;
@@ -60,11 +63,10 @@ IS
     CURSOR time_table2(g_id NUMBER,d_id NUMBER) IS
         SELECT s.subject_name, s.subject_id,  c.course_division, d.department_name,
             s.subject_group, c.course_start1, c.course_end1,
-            NVL(c.course_start2, 00000) course_start2, NVL(c.course_end2, 00000) course_end2
-            s.subject_credit, c.course_room, p.professor_name
+            NVL(c.course_start2, 00000) course_start2, NVL(c.course_end2, 00000) course_end2,
+            s.subject_credit, c.course_room, c.course_personnel, p.professor_name
         FROM COURSES c, SUBJECTS s, DEPARTMENTS d, PROFESSORS p
-        WHERE 
-            AND c.subject_id = s.subject_id
+        WHERE c.subject_id = s.subject_id
             AND c.professor_id = p.professor_id
             AND s.department_id = d_id -- 학생 소속 부서
             AND s.department_id = d.department_id
@@ -76,11 +78,10 @@ IS
 	  CURSOR time_table3(g_id NUMBER,d_id NUMBER) IS
         SELECT s.subject_name, s.subject_id,  c.course_division, d.department_name,
             s.subject_group, c.course_start1, c.course_end1,
-            NVL(c.course_start2, 00000) course_start2, NVL(c.course_end2, 00000) course_end2
-            s.subject_credit, c.course_room, p.professor_name
+            NVL(c.course_start2, 00000) course_start2, NVL(c.course_end2, 00000) course_end2,
+            s.subject_credit, c.course_room, c.course_personnel, p.professor_name
         FROM COURSES c, SUBJECTS s, DEPARTMENTS d, PROFESSORS p
-        WHERE 
-            AND c.subject_id = s.subject_id
+        WHERE c.subject_id = s.subject_id
             AND c.professor_id = p.professor_id
             AND s.department_id != d_id -- 학생 소속 부서
             AND s.department_id = d.department_id
@@ -94,7 +95,7 @@ BEGIN
 	into v_departId
 	FROM STUDENTS
 	WHERE student_id = sStudentId;
-	
+
 	-- 교양 / 전체
 	IF sGroupId = 0 OR sGroupId = 2 THEN 
 		FOR t IN time_table1(sGroupId) LOOP
@@ -119,11 +120,7 @@ BEGIN
 			enroll_list := SHOW_ENROLL_TYPE(t.subject_name,t.subject_id,t.course_division,t.department_name,v_group,
     			course_time , t.subject_credit, t.course_personnel, nCnt1,nCnt2 ,t.professor_name);
     		PIPE ROW(enroll_list);
-        END LOOP;
-	
-
-        
-        
+        END LOOP;    
         
     -- 전공 
 	ELSIF sGroupId = 1 THEN
@@ -150,7 +147,7 @@ BEGIN
     ELSIF sGroupId = 3 THEN
 		FOR t IN time_table3(sStudentId,v_departId) LOOP
 			SELECT COUNT(*)
-			INTO nCnt
+			INTO nCnt1
 			FROM ENROLL e
 			WHERE e.subject_id = t.subject_id 
 				AND e.course_division = t.course_division
@@ -165,9 +162,9 @@ BEGIN
 			ELSE
 				v_group := '전공';
 			END IF;
-			nCnt := t.course_personnel - nCnt;
-			enroll_list := SHOW_ENROLL_TYPE(t.subject_name,t.subject_id,t.course_division,t.department_id,v_group,
-    			course_time ,t.subject_credit, t.course_personnel, nCnt ,t.professor_id);
+			nCnt2 := t.course_personnel - nCnt1; -- 여석
+			enroll_list := SHOW_ENROLL_TYPE(t.subject_name,t.subject_id,t.course_division,t.department_name,v_group,
+    			course_time , t.subject_credit, t.course_personnel, nCnt1,nCnt2 ,t.professor_name);
     		PIPE ROW(enroll_list);
         END LOOP;	
 	END IF;
