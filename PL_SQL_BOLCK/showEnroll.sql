@@ -185,3 +185,42 @@ from table(SelectEnrollTable(1812357, 2));
 -- 타전공: 3
 select * 
 from table(SelectEnrollTable(1812357, 3));
+			     
+			     
+--확인용
+--교양 15개     
+  SELECT count(*)
+  FROM COURSES c, SUBJECTS s
+        WHERE c.subject_id = s.subject_id
+            AND s.subject_group <= 0;
+  --전체 전공 29개     
+  SELECT count(*)
+  FROM COURSES c, SUBJECTS s
+        WHERE c.subject_id = s.subject_id
+            AND s.subject_group =1;
+   
+    --전체 44개    
+  SELECT *
+  FROM COURSES c, SUBJECTS s
+        WHERE c.subject_id = s.subject_id
+            AND s.subject_group <= 2;
+  
+  --1812357의 타전공   26개
+  SELECT *
+  FROM COURSES c, SUBJECTS s
+        WHERE c.subject_id = s.subject_id
+            AND s.department_id != 3;
+            
+    --1812357의 전공 부서번호 3번  3개
+  SELECT *
+  FROM COURSES c, SUBJECTS s
+        WHERE c.subject_id = s.subject_id
+            AND s.department_id = 3
+            AND s.subject_group =1;
+            
+     SELECT COUNT(*)
+  FROM COURSES c, SUBJECTS s
+        WHERE c.subject_id = s.subject_id
+            AND s.department_id = 3
+            AND s.subject_group =1;
+   
