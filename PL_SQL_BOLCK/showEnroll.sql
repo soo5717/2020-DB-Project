@@ -145,7 +145,7 @@ BEGIN
 	
 	-- 타전공 
     ELSIF sGroupId = 3 THEN
-		FOR t IN time_table3(sStudentId,v_departId) LOOP
+		FOR t IN time_table3(1,v_departId) LOOP
 			SELECT COUNT(*)
 			INTO nCnt1
 			FROM ENROLL e
