@@ -36,8 +36,8 @@ PIPELINED
 IS
 	enroll_list SHOW_ENROLL_TYPE;
 	sql_string VARCHAR2(500);
-    nYear NUMBER;
-	nSemester NUMBER;/*현재 학기*/
+  	nYear ENROLL.enroll_year%TYPE;
+	nSemester ENROLL.enroll_semester%TYPE;/*현재 학기*/
 	nCnt1 NUMBER :=0; --신청
 	nCnt2 NUMBER :=0; --여석
 	course_time VARCHAR2(70);
@@ -55,10 +55,7 @@ IS
             AND c.professor_id = p.professor_id
             AND s.department_id = d.department_id
             AND s.subject_group <= g_id;
-   
-    
-    		
-    		
+     		
     -- 전공    			 
     CURSOR time_table2(g_id NUMBER,d_id NUMBER) IS
         SELECT s.subject_name, s.subject_id,  c.course_division, d.department_name,
@@ -71,8 +68,6 @@ IS
             AND s.department_id = d_id -- 학생 소속 부서
             AND s.department_id = d.department_id
             AND s.subject_group = g_id;
-   
-    			 
     			 
     -- 타전공
 	  CURSOR time_table3(g_id NUMBER,d_id NUMBER) IS
@@ -99,6 +94,7 @@ BEGIN
 	-- 교양 / 전체
 	IF sGroupId = 0 OR sGroupId = 2 THEN 
 		FOR t IN time_table1(sGroupId) LOOP
+			
 			SELECT COUNT(*)
 			INTO nCnt1 --해당과목신청인원
 			FROM ENROLL e
@@ -106,6 +102,8 @@ BEGIN
 				AND e.course_division = t.course_division
 				AND e.enroll_year = nYear 
 				AND e.enroll_semester = nSemester;
+			
+		
 			-- 시간 변환 부분 
         	course_time := Number2TableTime(t.course_start1, t.course_end1, 
                                         t.course_start2, t.course_end2, t.course_room);
@@ -121,6 +119,8 @@ BEGIN
     			course_time , t.subject_credit, t.course_personnel, nCnt1,nCnt2 ,t.professor_name);
     		PIPE ROW(enroll_list);
         END LOOP;    
+        
+    	
         
     -- 전공 
 	ELSIF sGroupId = 1 THEN
@@ -171,6 +171,7 @@ BEGIN
 	RETURN;
 END;
 /
+
 
 -- 테스트 용 : enroll(insert.sql) 테이블에 추가한 후에 가능
 -- 교양: 0
