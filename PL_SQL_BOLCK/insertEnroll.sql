@@ -1,4 +1,3 @@
--- 아직 수정 안함
 CREATE OR REPLACE PROCEDURE InsertEnroll(
 studentID in NUMBER,
 subjectID in NUMBER,
