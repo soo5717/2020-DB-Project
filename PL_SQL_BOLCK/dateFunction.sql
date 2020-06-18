@@ -51,6 +51,7 @@ IS
   t_arr time_arr;
   i number := 1;
   d_arr day_arr;
+  tmp number;
 BEGIN
 	t_arr(1) := to_char(c_start);
 	t_arr(2) := to_char(c_end);
@@ -69,7 +70,19 @@ BEGIN
 	  	
 	  	IF day != 0 THEN
 			res := res || d_arr( day );
-			res := res || trunc(to_number(t_arr(i)), -2)/100||':'  || mod( to_number(t_arr(i)) ,100  ) ||'-' ;
+			tmp := trunc(to_number(t_arr(i)), -2)/100 ;
+			IF tmp < 10 THEN
+				res := res || '0' || tmp ||':' ;
+			ELSE
+				res := res || tmp ||':'  || mod( to_number(t_arr(i)) ,100  ) ||'-' ;
+			END IF;
+			tmp :=  mod( to_number(t_arr(i)) ,100  );
+			IF tmp < 10 THEN
+				res := res || '0' ||tmp ||'-' ;
+			ELSE
+				res := res || tmp ||'-' ;
+			END IF;		
+			
 			res := res || substr(t_arr(i+1),2,2) ||':'  || substr(t_arr(i+1),4);
 		END IF;
 	  	i := i+2;
@@ -78,5 +91,10 @@ BEGIN
   RETURN res;
 END;
 / 
-                 
+
+--출력 확인 데이터
+select Number2TableTime(10905,10930,21100,21605,'hello')
+from dual;
+select Number2TableTime(10905,10930,0,0,'hello')
+from dual;
              
