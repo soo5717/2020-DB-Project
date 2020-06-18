@@ -225,8 +225,9 @@ from table(SelectEnrollTable(1812357, 3));
             AND s.department_id = 3
             AND s.subject_group =1;
    
---서브쿼리(단일행) 사용, 			     
-/*CREATE OR REPLACE FUNCTION SelectEnrollTable(
+--서브쿼리(단일행) 사용, 	
+/*		     
+CREATE OR REPLACE FUNCTION SelectEnrollTable(
     sStudentId IN NUMBER, 
 	sGroupId IN NUMBER
 )
@@ -236,7 +237,7 @@ IS
 	enroll_list SHOW_ENROLL_TYPE;
 	sql_string VARCHAR2(500);
     nYear ENROLL.enroll_year%TYPE;
-	nSemester ENROLL.enroll_semester%TYPE;/*현재 학기*/
+	nSemester ENROLL.enroll_semester%TYPE; --현재 학기
 	nCnt1 NUMBER :=0; --신청
 	nCnt2 NUMBER :=0; --여석
 	course_time VARCHAR2(70);
@@ -372,4 +373,4 @@ BEGIN
 	RETURN;
 END;
 /
-			     */
+*/

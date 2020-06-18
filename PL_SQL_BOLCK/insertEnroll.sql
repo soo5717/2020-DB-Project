@@ -1,8 +1,9 @@
+-- 수강신청 검증 프로시저
 CREATE OR REPLACE PROCEDURE InsertEnroll(
-studentID in NUMBER,
-subjectID in NUMBER,
-courseDivision in NUMBER,
-result out VARCHAR2
+	studentID in NUMBER,
+	subjectID in NUMBER,
+	courseDivision in NUMBER,
+	result out VARCHAR2
 )
 IS
 	too_many_sumCredit EXCEPTION;
@@ -30,7 +31,7 @@ BEGIN
 	WHERE e.student_id = studentID
 		AND e.subject_id = s.subject_id 
 		AND e.enroll_year = nYear
-		  AND e.enroll_semester = nSemester;
+		AND e.enroll_semester = nSemester;
 		    
 	
 	--DBMS_OUTPUT.PUT_LINE('신청 학점' || nSumCredit);
@@ -125,6 +126,7 @@ BEGIN
 END;
 /
 
+-- 수강신청 중복확인 함수
 CREATE OR REPLACE FUNCTION CheckTimeDuplicate
 (
 	studentId in NUMBER,
@@ -177,7 +179,7 @@ END ;
 
 
 
---예제 데이터
+--예제 데이터 : 예제 pk 중복 있음
 INSERT INTO ENROLL
 	VALUES ( 1007, 1, 1812357, 2020,2 );
 INSERT INTO ENROLL
