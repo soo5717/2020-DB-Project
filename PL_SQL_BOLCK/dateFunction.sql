@@ -51,7 +51,6 @@ IS
   t_arr time_arr;
   i number := 1;
   d_arr day_arr;
-
 BEGIN
 	t_arr(1) := to_char(c_start);
 	t_arr(2) := to_char(c_end);
@@ -63,18 +62,14 @@ BEGIN
 	d_arr(4) :=  ' 수';
 	d_arr(5) :=  ' 목';
 	d_arr(6) :=  ' 금';
-	d_arr(7) :=  ' 토';
-	
-	res := '';
-	
-
+	d_arr(7) :=  ' 토';	
+	res := '';	
   	WHILE i<4 loop
 	  	day := to_number(t_arr(i)) / 10000 ;
 	  	
 	  	IF day != 0 THEN
 			res := res || d_arr( day );
-			
-			res := res || substr(t_arr(i),2,2)||':'  || substr(t_arr(i),4) ||'-' ;
+			res := res || trunc(to_number(t_arr(i)), -2)/100||':'  || mod( to_number(t_arr(i)) ,100  ) ||'-' ;
 			res := res || substr(t_arr(i+1),2,2) ||':'  || substr(t_arr(i+1),4);
 		END IF;
 	  	i := i+2;
@@ -84,3 +79,4 @@ BEGIN
 END;
 / 
                  
+             
