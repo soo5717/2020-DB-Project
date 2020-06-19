@@ -16,6 +16,8 @@ IS
 	nCredit NUMBER; /*해당 과목의 학점*/
 	nCnt NUMBER;
 	nTeachMax NUMBER;
+	
+	v_scredit students%rowtype;
 BEGIN	
 	DBMS_OUTPUT.PUT_LINE('###');
 	DBMS_OUTPUT.PUT_LINE(studentID ||'님이 과목 번호 '|| subjectID ||' 분반 ' || TO_CHAR(courseDivision) ||'의 수강 등록을 요청하셨습니다.');
@@ -44,14 +46,20 @@ BEGIN
 	--DBMS_OUTPUT.PUT_LINE('해당 과목 학점' || nCredit);
 	
 	/*19가 아닌 학생 기준으로 가져오기*/
+	/*
 	SELECT student_credit
 	INTO nCnt
 	FROM STUDENTS
 	WHERE STUDENTS.student_id = studentID; 
-	--DBMS_OUTPUT.PUT_LINE('해당 학생 신청 가능 학점' || nCnt);
+	--DBMS_OUTPUT.PUT_LINE('해당 학생 신청 가능 학점' || nCnt);*/
 	
-	IF(nSumCredit + nCredit > nCnt)/*성적 넣지 않아 기본인 18로*/
+	select student_credit
+	into v_scredit.student_credit
+	from students 
+	where student_id = studentID;
 	
+	--IF(nSumCredit + nCredit > nCnt)/*성적 넣지 않아 기본인 18로*/
+	IF(nSumCredit + nCredit > v_scredit.student_credit)/*성적 넣지 않아 기본인 18로*/
 	THEN 
 		RAISE too_many_sumCredit;
 	END IF;
