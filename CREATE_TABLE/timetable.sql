@@ -6,7 +6,7 @@ SELECT
     s.subject_id,
     c.course_division,
     p.professor_name,
-    c.room_name,
+    c.course_room,
     c.course_start1,
     NVL(c.course_start2, 0) course_start2,
     c.course_end1,
