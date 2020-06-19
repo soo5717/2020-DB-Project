@@ -13,3 +13,4 @@ create table ENROLL(
 --시간표 조회를 위한 insert문
 insert into enroll values(1014, 01, 1700000, 2020, 1);
 insert into enroll values(1848, 01, 1700000, 2020, 1);
+insert into enroll values(1848, 01, 1700001, 2020, 1);
