@@ -2,6 +2,25 @@
 -- 순차적으로 끊어서 1, 2, 3번 실행시키면 됩니다!
 
 -- 1번 : Return을 위한 Object 생성
+
+
+declare
+v_c courses%rowtype;
+	CURSOR numOfCourses IS
+        SELECT subject_id,course_division
+        FROM COURSES;
+begin
+
+	OPEN numOfCourses;
+	LOOP
+		FETCH numOfCourses INTO v_c.subject_id,v_c.course_division;
+		EXIT WHEN numOfCourses%NOTFOUND;
+	END LOOP;
+	DBMS_OUTPUT.PUT_LINE('전체 수업 개수 : ' || numOfCourses%ROWCOUNT);
+	CLOSE numOfCourses;
+end;
+/
+
 CREATE OR REPLACE TYPE SHOW_ENROLL_TYPE AS OBJECT
 (
 	subject_name VARCHAR2(100),
@@ -81,7 +100,23 @@ IS
             AND s.department_id != d_id -- 학생 소속 부서
             AND s.department_id = d.department_id
             AND s.subject_group = g_id;
+            
+     --수업 개수 확인       
+	v_c courses%rowtype;
+	CURSOR numOfCourses IS
+        SELECT subject_id,course_division
+        FROM COURSES;
 BEGIN
+
+	
+	OPEN numOfCourses;
+	LOOP
+		FETCH numOfCourses INTO v_c.subject_id,v_c.course_division;
+		EXIT WHEN numOfCourses%NOTFOUND;
+	END LOOP;
+	DBMS_OUTPUT.PUT_LINE('전체 수업 개수 : ' || numOfCourses%ROWCOUNT);
+	CLOSE numOfCourses;
+	
 	-- 년도 학기 알아내기 -->신청인원 때문에 필요
 	nYear := Date2EnrollYear(SYSDATE);
 	nSemester := Date2EnrollSemester(SYSDATE);
@@ -167,7 +202,7 @@ BEGIN
     			course_time , t.subject_credit, t.course_personnel, nCnt1,nCnt2 ,t.professor_name);
     		PIPE ROW(enroll_list);
         END LOOP;	
-	END IF;
+	END IF;	
 	RETURN;
 END;
 /
@@ -283,7 +318,23 @@ IS
             AND s.department_id != d_id -- 학생 소속 부서
             AND s.department_id = d.department_id
             AND s.subject_group = g_id;
+            
+            
+    --수업 개수 확인
+    v_c courses%rowtype;
+	CURSOR numOfCourses IS
+        SELECT subject_id,course_division
+        FROM COURSES;
 BEGIN
+	--총 수업개수 출력
+	OPEN numOfCourses;
+	LOOP
+		FETCH numOfCourses INTO v_c.subject_id,v_c.course_division;
+		EXIT WHEN numOfCourses%NOTFOUND;
+	END LOOP;
+	DBMS_OUTPUT.PUT_LINE('전체 수업 개수 : ' || numOfCourses%ROWCOUNT);
+	CLOSE numOfCourses;
+	
 	-- 년도 학기 알아내기 -->신청인원 때문에 필요
 	nYear := Date2EnrollYear(SYSDATE);
 	nSemester := Date2EnrollSemester(SYSDATE);
@@ -370,6 +421,7 @@ BEGIN
     		PIPE ROW(enroll_list);
         END LOOP;	
 	END IF;
+	
 	RETURN;
 END;
 /
