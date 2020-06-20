@@ -106,7 +106,6 @@ BEGIN
 	into nCnt
 	from dual;
 	
-	--DBMS_OUTPUT.PUT_LINE('시간 중복 여부 ' || nCnt);
 	
 	IF (nCnt > 0) 
 	THEN 
@@ -146,8 +145,8 @@ BEGIN
 			result:='시간표가 중복됩니다.';
 		WHEN reenroll_course THEN
 			result:='이미 수강했던 과목입니다.';
-		--WHEN OTHERS THEN
-		--	result:= 'other error : '||SQLCODE;	 
+		WHEN OTHERS THEN
+			result:= 'other error : '||SQLCODE;	 
 END;
 /
 
