@@ -1,4 +1,5 @@
 -- 수강신청 검증 프로시저
+-- 수강신청 검증 프로시저
 CREATE OR REPLACE PROCEDURE InsertEnroll(
 	studentID in NUMBER,
 	subjectID in NUMBER,
@@ -10,6 +11,7 @@ IS
 	too_many_courses EXCEPTION;
 	too_many_students EXCEPTION;
 	duplicate_time EXCEPTION;
+	reenroll_course EXCEPTION;
 	nYear NUMBER;
 	nSemester NUMBER;/*현재 학기*/
 	nSumCredit NUMBER; /*총 신청 학점*/
@@ -112,6 +114,20 @@ BEGIN
 		RAISE duplicate_time;
 	END IF;
 	
+	nCnt :=0;
+	
+	/*재수강*/
+	select count(*)
+	into nCnt
+	from enroll
+	where student_id = studentId and subject_id = subjectId;
+
+	
+	IF (nCnt > 0) 
+	THEN 
+		RAISE reenroll_course;
+	END IF;
+	
 	/*수강 신청 등록*/
 	INSERT INTO ENROLL( subject_id, course_division, student_id, enroll_year, enroll_semester )
 	VALUES (subjectID,courseDivision,studentID,nYear,nSemester);
@@ -129,10 +145,13 @@ BEGIN
 			result:='수강신청 인원이 초과했습니다.';
 		WHEN duplicate_time THEN
 			result:='시간표가 중복됩니다.';
+		WHEN reenroll_course THEN
+			result:='이미 수강했던 과목입니다.';
 		--WHEN OTHERS THEN
 		--	result:= 'other error : '||SQLCODE;	 
 END;
 /
+
 
 -- 수강신청 중복확인 함수
 CREATE OR REPLACE FUNCTION CheckTimeDuplicate
