@@ -1,5 +1,4 @@
 -- 수강신청 검증 프로시저
--- 수강신청 검증 프로시저
 CREATE OR REPLACE PROCEDURE InsertEnroll(
 	studentID in NUMBER,
 	subjectID in NUMBER,
