@@ -28,3 +28,47 @@ INSERT INTO ENROLL VALUES (1842, 1, 1812357, 2020, 2);
 INSERT INTO ENROLL VALUES (1845, 1, 1812357, 2020, 2);
 INSERT INTO ENROLL VALUES (1011, 1, 1812357, 2020, 2);
 INSERT INTO ENROLL VALUES (1006, 1, 1812357, 2020, 2);
+
+
+
+--테스트를 위한 pl/sql block
+Set ServerOutput On;
+/
+
+DECLARE
+result  VARCHAR2(50) := '';
+BEGIN
+
+DBMS_OUTPUT.enable;
+
+DBMS_OUTPUT.put_line
+    ('**************** Insert 및 에러 처리 테스트 ********************');
+/*  에러가 없는 경우 1 : 데이터 베이스 설계*/
+InsertEnroll(1901378, 1844, 3, result);
+DBMS_OUTPUT.put_line('결과 : ' || result);
+
+
+/* 에러 처리 2 : 동일 과목 신청  : 데이터 베이스 설계*/
+InsertEnroll(1901378, 1844, 3, result);
+DBMS_OUTPUT.put_line('결과 : ' || result);
+
+
+/* 에러 처리 4 : 신청한 과목들 시간 중복 여부 : 기업분쟁해결 실무*/
+InsertEnroll(1901378, 1019,  1,result);
+DBMS_OUTPUT.put_line('결과 : ' || result);
+
+
+/* 에러처리 1: 수강 신청 쵀대학점 초과 신청(이 학생은 최대5학점) : */
+InsertEnroll(1901378, 1841, 1, result);
+DBMS_OUTPUT.put_line('결과 : ' || result);
+
+
+DBMS_OUTPUT.put_line
+       ('***************** CURSOR를 이용한 SELECT 테스트 ****************');
+/* 최종 결과 확인  */
+--SelectTimeTable('20011234', 2004, 1);
+
+delete from enroll where student_id=1901378;
+
+END;
+/

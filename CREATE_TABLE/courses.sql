@@ -16,10 +16,10 @@ create table COURSES(
 
 INSERT INTO courses VALUES (109, 1001, 1, 21700 ,21800, 41700, 41800, 3, '프라임관 203호');
 INSERT INTO courses VALUES (109, 1001, 2, 61000 ,61150, null, null, 3, '프라임관 203호');
-INSERT INTO courses VALUES (109, 1005, 1, 71000 ,71150, null, null, 3, '프라임관 105호');
+--INSERT INTO courses VALUES (109, 1005, 1, 71000 ,71150, null, null, 3, '프라임관 105호');
 INSERT INTO courses VALUES (108, 1002, 1, 21000 ,41150, null, null, 3, '교수회관 203호');
 INSERT INTO courses VALUES (108, 1002, 2, 21300 ,41450, null, null, 3, '교수회관 203호');
-INSERT INTO courses VALUES (108, 1002, 3, 71000 ,71150, null, null, 2, '순헌관 1021호');
+--INSERT INTO courses VALUES (108, 1002, 3, 71000 ,71150, null, null, 2, '순헌관 1021호');--토요일 강의 
 INSERT INTO courses VALUES (108, 1003, 1, 21800 ,21950, null, null, 3, '순헌관 203호');
 INSERT INTO courses VALUES (108, 1004, 1, 41000 ,41150, null, null, 3, '순헌관 710호');
 INSERT INTO courses VALUES (108, 1004, 2, 41500 ,41170, null, null, 3, '순헌관 711호');

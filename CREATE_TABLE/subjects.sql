@@ -15,7 +15,7 @@ INSERT INTO subjects VALUES (1003,'교양 미술(한국화)', 3, 4,0);
 INSERT INTO subjects VALUES (1004,'교양 미술(서양화)', 3, 4,0);
 INSERT INTO subjects VALUES (1005,'생명과 존엄성', 2, 5,0); 
 INSERT INTO subjects VALUES (1006,'그림으로 보는 예술', 3, 1,0);
-INSERT INTO subjects VALUES (1007,'현대미술사', 2, 1,0);
+INSERT INTO subjects VALUES (1007,'현대미술사', 2, 4,0);
 INSERT INTO subjects VALUES (1008,'고전미술사', 3, 2,0);
 INSERT INTO subjects VALUES (1009,'기초 회화', 2, 3,0);
 INSERT INTO subjects VALUES (1010,'한국화의 이해', 3, 2,0);

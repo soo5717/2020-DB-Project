@@ -21,6 +21,8 @@ INSERT INTO students VALUES (1810003, '0000', '최예원', 5, 19, 4, '대구광�
 INSERT INTO students VALUES (1914334, '0000', '김빛나리', 3, 19, 4, '서울특별시 도봉구');
 INSERT INTO students VALUES (1938224, '0000', '박개나리', 2, 19, 5, '부산광역시 해운대구');
 INSERT INTO students VALUES (1901378, '0000', '최봄날', 2, 19, 5, '대전광역시 서구');
+-- insertEnrollTest 에서 사용할 데이터
+INSERT INTO students VALUES (1812345, '0000', '예처리', 4, 5, 2, '서울특별시 강남구');
 
 -- Update rows in a Table
 
