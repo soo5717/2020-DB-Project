@@ -25,7 +25,7 @@ INSERT INTO courses VALUES (108, 1004, 1, 41000 ,41150, null, null, 3, '순헌�
 INSERT INTO courses VALUES (108, 1004, 2, 41500 ,41170, null, null, 3, '순헌관 711호');
 INSERT INTO courses VALUES (108, 1006, 1, 61000 ,61150, null, null, 3, '창학 B111호');
 INSERT INTO courses VALUES (110, 1007, 1, 31000 ,31150, 51000, 51150, 3, '창학 B111호');
-INSERT INTO courses VALUES (110, 1007, 2, 31200 ,31140, 51200, 51400, 3, '프라임관 304호');
+INSERT INTO courses VALUES (110, 1007, 2, 31200 ,31200, 51200, 51400, 3, '프라임관 304호');
 INSERT INTO courses VALUES (110, 1008, 1, 31500 ,31600, 51500, 51600, 3, '프라임관 201호');
 INSERT INTO courses VALUES (110, 1009, 1, 21800 ,22000, null, null, 3, '순헌관 403호');
 INSERT INTO courses VALUES (110, 1010, 1, 41800 ,42000, null, null, 3, '순헌관 505호');
