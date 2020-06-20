@@ -10,15 +10,15 @@ CREATE TABLE SUBJECTS(
 );
 
 INSERT INTO subjects VALUES (1001,'암의 이해', 2, 3,0); 
-INSERT INTO subjects VALUES (1002,'고전으로 보는 미술의 이해', 2, 5,0);
+INSERT INTO subjects VALUES (1002,'고전으로 보는 미술의 이해', 2, 3,0);
 INSERT INTO subjects VALUES (1003,'교양 미술(한국화)', 3, 4,0);
 INSERT INTO subjects VALUES (1004,'교양 미술(서양화)', 3, 4,0);
-INSERT INTO subjects VALUES (1005,'생명과 존엄성', 2, 5,0); 
-INSERT INTO subjects VALUES (1006,'그림으로 보는 예술', 3, 1,0);
+INSERT INTO subjects VALUES (1005,'생명과 존엄성', 2, 3,0); 
+INSERT INTO subjects VALUES (1006,'그림으로 보는 예술', 3, 4,0);
 INSERT INTO subjects VALUES (1007,'현대미술사', 2, 4,0);
 INSERT INTO subjects VALUES (1008,'고전미술사', 3, 2,0);
-INSERT INTO subjects VALUES (1009,'기초 회화', 2, 3,0);
-INSERT INTO subjects VALUES (1010,'한국화의 이해', 3, 2,0);
+INSERT INTO subjects VALUES (1009,'기초 회화', 2, 4,0);
+INSERT INTO subjects VALUES (1010,'한국화의 이해', 4, 2,0);
 INSERT INTO subjects VALUES(1011, '경영 정보 시스템', 3, 2, 1); 
 INSERT INTO subjects VALUES(1012, 'e비즈니스개론', 3, 2, 1); 
 INSERT INTO subjects VALUES(1013, '경영 데이터 분석1', 3, 2, 1); 
