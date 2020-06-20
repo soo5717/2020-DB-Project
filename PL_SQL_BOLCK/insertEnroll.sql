@@ -144,9 +144,7 @@ BEGIN
 		WHEN duplicate_time THEN
 			result:='시간표가 중복됩니다.';
 		WHEN reenroll_course THEN
-			result:='이미 수강했던 과목입니다.';
-		WHEN OTHERS THEN
-			result:= 'other error : '||SQLCODE;	 
+			result:='이미 수강했던 과목입니다.';	 
 END;
 /
 
