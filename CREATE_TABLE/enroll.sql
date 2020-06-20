@@ -5,7 +5,7 @@ create table ENROLL(
   student_id number not null, 
   enroll_year number not null,
   enroll_semester number not null, check (enroll_semester>=1 and  enroll_semester<=2 ),
-  CONSTRAINT enroll_pk PRIMARY KEY (subject_id, student_id), 
+  CONSTRAINT enroll_pk PRIMARY KEY (subject_id, student_id,enroll_year,enroll_semester), 
   CONSTRAINT enroll_fk_std FOREIGN KEY (student_id) REFERENCES students(student_id), 
   CONSTRAINT enroll_fk_sbj FOREIGN KEY (subject_id) REFERENCES subjects(subject_id)
 );
