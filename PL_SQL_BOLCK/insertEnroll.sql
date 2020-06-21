@@ -11,6 +11,7 @@ IS
 	too_many_students EXCEPTION;
 	duplicate_time EXCEPTION;
 	reenroll_course EXCEPTION;
+	no_course EXCEPTION;
 	nYear NUMBER;
 	nSemester NUMBER;/*현재 학기*/
 	nSumCredit NUMBER; /*총 신청 학점*/
@@ -26,7 +27,19 @@ BEGIN
 	nYear := Date2EnrollYear(SYSDATE);
 	nSemester := Date2EnrollSemester(SYSDATE);
 	
-	/*예외 처리1 : 최대학점 초과 여부*/
+	/*목록에 없는 과목*/
+	select count(*)
+	into nCnt
+	from courses
+	where subject_id = subjectID and course_division= courseDivision;
+		
+	IF (nCnt = 0) 
+	THEN 
+		RAISE no_course;
+	END IF;
+	
+	
+	/*최대학점 초과 여부*/
 	
 	SELECT NVL(SUM(s.subject_credit),0)
 	INTO nSumCredit
@@ -59,13 +72,13 @@ BEGIN
 	from students 
 	where student_id = studentID;
 	
-	--IF(nSumCredit + nCredit > nCnt)/*성적 넣지 않아 기본인 18로*/
-	IF(nSumCredit + nCredit > v_scredit.student_credit)/*성적 넣지 않아 기본인 18로*/
+	--IF(nSumCredit + nCredit > nCnt)
+	IF(nSumCredit + nCredit > v_scredit.student_credit)
 	THEN 
 		RAISE too_many_sumCredit;
 	END IF;
 	
-	/*에러 처리2 : 해당 학기에 동일 과목 신청 여부*/
+	/*해당 학기에 동일 과목 신청 여부*/
 	SELECT COUNT(*)
 	INTO nCnt
 	FROM ENROLL e
@@ -126,6 +139,10 @@ BEGIN
 		RAISE reenroll_course;
 	END IF;
 	
+	nCnt := 0;
+	
+	
+	
 	/*수강 신청 등록*/
 	INSERT INTO ENROLL( subject_id, course_division, student_id, enroll_year, enroll_semester )
 	VALUES (subjectID,courseDivision,studentID,nYear,nSemester);
@@ -144,7 +161,9 @@ BEGIN
 		WHEN duplicate_time THEN
 			result:='시간표가 중복됩니다.';
 		WHEN reenroll_course THEN
-			result:='이미 수강했던 과목입니다.';	 
+			result:='이미 수강했던 과목입니다.';
+		WHEN no_course THEN
+			result:='없는 과목 입니다.';			
 END;
 /
 
@@ -181,10 +200,10 @@ BEGIN
 	WHERE s.subject_id =  subjectId AND c.subject_id = s.subject_id
 		AND c.course_division = courseDivision;
 	
-	DBMS_OUTPUT.PUT_LINE('시간 : ' || nStr1  );
+	--DBMS_OUTPUT.PUT_LINE('시간 : ' || nStr1  );
 	
 	FOR t IN my_time_table(studentId,nYear,nSemester) LOOP
-		DBMS_OUTPUT.PUT_LINE('비교 시간 : ' || t.str1 );
+		--DBMS_OUTPUT.PUT_LINE('비교 시간 : ' || t.str1 );
 		
 		IF (t.str1 < nEnd1 AND t.end1 > nStr1) THEN
 			RETURN 1; --시간 중복
