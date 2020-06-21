@@ -11,6 +11,7 @@ IS
 	too_many_students EXCEPTION;
 	duplicate_time EXCEPTION;
 	reenroll_course EXCEPTION;
+	no_course EXCEPTION;
 	nYear NUMBER;
 	nSemester NUMBER;/*현재 학기*/
 	nSumCredit NUMBER; /*총 신청 학점*/
@@ -126,6 +127,20 @@ BEGIN
 		RAISE reenroll_course;
 	END IF;
 	
+	nCnt := 0;
+	/*목록에 없는 과목*/
+	select count(*)
+	into nCnt
+	from courses
+	where subject_id = subjectID and course_division= courseDivision
+	
+		
+	IF (nCnt > 0) 
+	THEN 
+		RAISE reenroll_course;
+	END IF;
+	
+	
 	/*수강 신청 등록*/
 	INSERT INTO ENROLL( subject_id, course_division, student_id, enroll_year, enroll_semester )
 	VALUES (subjectID,courseDivision,studentID,nYear,nSemester);
@@ -144,7 +159,10 @@ BEGIN
 		WHEN duplicate_time THEN
 			result:='시간표가 중복됩니다.';
 		WHEN reenroll_course THEN
-			result:='이미 수강했던 과목입니다.';	 
+			result:='이미 수강했던 과목입니다.';
+		WHEN no_course THEN
+			result:='없는 과목 입니다.';
+			
 END;
 /
 
