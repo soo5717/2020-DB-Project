@@ -128,8 +128,8 @@ BEGIN
 	END IF;
 	
 	nCnt := 0;
-	/*목록에 없는 과목*/
 	
+	/*목록에 없는 과목*/
 	select count(*)
 	into nCnt
 	from courses
