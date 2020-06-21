@@ -7,7 +7,8 @@ create table ENROLL(
   enroll_semester number not null, check (enroll_semester>=1 and  enroll_semester<=2 ),
   CONSTRAINT enroll_pk PRIMARY KEY (subject_id, student_id), 
   CONSTRAINT enroll_fk_std FOREIGN KEY (student_id) REFERENCES students(student_id), 
-  CONSTRAINT enroll_fk_sbj FOREIGN KEY (subject_id) REFERENCES subjects(subject_id)
+  CONSTRAINT enroll_fk_sbj FOREIGN KEY (subject_id) REFERENCES subjects(subject_id),
+  CONSTRAINT enroll_fk_cr_dvs FOREIGN KEY (course_division) REFERENCES courses(course_division)
 );
 
 --시간표 조회를 위한 insert문
