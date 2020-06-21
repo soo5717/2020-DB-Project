@@ -40,7 +40,6 @@ BEGIN
 	
 	
 	/*최대학점 초과 여부*/
-	
 	SELECT NVL(SUM(s.subject_credit),0)
 	INTO nSumCredit
 	FROM ENROLL e,Subjects s
@@ -48,31 +47,17 @@ BEGIN
 		AND e.subject_id = s.subject_id 
 		AND e.enroll_year = nYear
 		AND e.enroll_semester = nSemester;
-		    
-	
-	--DBMS_OUTPUT.PUT_LINE('신청 학점' || nSumCredit);
 		  
 	SELECT subject_credit
 	INTO nCredit
 	FROM SUBJECTS s
 	WHERE s.subject_id = subjectID;
 	
-	--DBMS_OUTPUT.PUT_LINE('해당 과목 학점' || nCredit);
-	
-	/*19가 아닌 학생 기준으로 가져오기*/
-	/*
-	SELECT student_credit
-	INTO nCnt
-	FROM STUDENTS
-	WHERE STUDENTS.student_id = studentID; 
-	--DBMS_OUTPUT.PUT_LINE('해당 학생 신청 가능 학점' || nCnt);*/
-	
 	select student_credit
 	into v_scredit.student_credit
 	from students 
 	where student_id = studentID;
 	
-	--IF(nSumCredit + nCredit > nCnt)
 	IF(nSumCredit + nCredit > v_scredit.student_credit)
 	THEN 
 		RAISE too_many_sumCredit;
@@ -84,7 +69,6 @@ BEGIN
 	FROM ENROLL e
 	WHERE e.student_id = studentID AND e.subject_id = subjectID
 		  AND e.enroll_year = nYear AND e.enroll_semester = nSemester;
-	--DBMS_OUTPUT.PUT_LINE('동일 과목 신청 여부' || nCnt);
 	IF (nCnt > 0)
 	THEN 
 		RAISE too_many_courses;
@@ -102,24 +86,16 @@ BEGIN
 	WHERE e.enroll_year = nYear AND e.enroll_semester = nSemester 
 		AND e.subject_id = subjectID AND e.course_division = courseDivision;
 	
-	--DBMS_OUTPUT.PUT_LINE('수강 가능 인원 : ' || nTeachMax  ||'  해당분반 신청 인원 : ' || nCnt);
-	
 	IF (nCnt >= nTeachMax)
 	THEN
 		RAISE too_many_students;
 	END IF;
 		
 	/*에러처리4 : 신청한 과목들 시간 중복 여부*/		
-	/*
-	VAR dup_res NUMBER;
-	EXECUTE :nCnt := CheckTimeDuplicate(:studentID, :subjectID, :course_division, :nYear, :nSemester);
-	*/
-	
 	select CheckTimeDuplicate(studentID,subjectID,courseDivision,nYear,nSemester)
 	into nCnt
 	from dual;
-	
-	
+
 	IF (nCnt > 0) 
 	THEN 
 		RAISE duplicate_time;
@@ -140,8 +116,6 @@ BEGIN
 	END IF;
 	
 	nCnt := 0;
-	
-	
 	
 	/*수강 신청 등록*/
 	INSERT INTO ENROLL( subject_id, course_division, student_id, enroll_year, enroll_semester )
@@ -200,10 +174,7 @@ BEGIN
 	WHERE s.subject_id =  subjectId AND c.subject_id = s.subject_id
 		AND c.course_division = courseDivision;
 	
-	--DBMS_OUTPUT.PUT_LINE('시간 : ' || nStr1  );
-	
 	FOR t IN my_time_table(studentId,nYear,nSemester) LOOP
-		--DBMS_OUTPUT.PUT_LINE('비교 시간 : ' || t.str1 );
 		
 		IF (t.str1 < nEnd1 AND t.end1 > nStr1) THEN
 			RETURN 1; --시간 중복
