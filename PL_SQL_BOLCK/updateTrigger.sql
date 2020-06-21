@@ -11,7 +11,7 @@
   BEGIN
     new_pw := :new.student_pw;
     nLength := LENGTH(new_pw);
-    nBlank := LENGTH(new_pw)-LENGTH(REPLACE(new_pw,' ', ''));
+    nBlank := INSTR(new_pw, ' ', 1);
     
     IF (nLength < 4) THEN
       RAISE underflow_length;
