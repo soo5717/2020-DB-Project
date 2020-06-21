@@ -65,10 +65,8 @@ BEGIN
 	d_arr(6) :=  ' 금';
 	d_arr(7) :=  ' 토';	
 	res := '';	
-  	
 	WHILE i<4 loop
-		day := to_number(t_arr(i)) / 10000 ;
-	  	
+		day := to_number(t_arr(i)) / 10000 ;	
 	  	IF day != 0 THEN
 			res := res || d_arr( day );
 			tmp := mod(trunc(to_number(t_arr(i)), -2)/100,100) ;
@@ -83,7 +81,6 @@ BEGIN
 			ELSE
 				res := res || tmp ||'-' ;
 			END IF;		
-			
 			res := res || substr(t_arr(i+1),2,2) ||':'  || substr(t_arr(i+1),4);
 		END IF;
 	  	i := i+2;
