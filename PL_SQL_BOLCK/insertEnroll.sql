@@ -135,9 +135,9 @@ BEGIN
 	where subject_id = subjectID and course_division= courseDivision
 	
 		
-	IF (nCnt > 0) 
+	IF (nCnt = 0) 
 	THEN 
-		RAISE reenroll_course;
+		RAISE no_course;
 	END IF;
 	
 	
