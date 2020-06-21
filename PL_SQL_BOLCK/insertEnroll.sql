@@ -129,11 +129,11 @@ BEGIN
 	
 	nCnt := 0;
 	/*목록에 없는 과목*/
+	
 	select count(*)
 	into nCnt
 	from courses
-	where subject_id = subjectID and course_division= courseDivision
-	
+	where subject_id = subjectID and course_division= courseDivision;
 		
 	IF (nCnt = 0) 
 	THEN 
